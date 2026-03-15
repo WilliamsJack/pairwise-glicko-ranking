@@ -1,7 +1,7 @@
 {
 	"id": "pairwise-glicko-ranking",
 	"name": "Pairwise Glicko Ranking",
-	"version": "1.7.0",
+	"version": "1.7.1",
 	"minAppVersion": "1.10.0",
 	"description": "Easily sort notes by any subjective criteria - Rank cohorts of notes in your vault by pairwise comparisons using the Glicko rating system.",
 	"author": "Jack Williams",
