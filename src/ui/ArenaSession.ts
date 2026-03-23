@@ -117,10 +117,26 @@ export default class ArenaSession {
       this.plugin.registerDomEvent(win, 'beforeunload', this.popoutUnloadHandler);
     }
 
+    await this.preloadFileIds();
     this.pickNextPair();
     await this.openCurrent();
     this.updateOverlay();
     this.updateStabilityBar();
+  }
+
+  /**
+   * Read note IDs for all files up-front so the matchmaker can look up
+   * actual stats on the first pair pick, allowing the information-gain
+   * algorithm to prioritise genuinely new notes.
+   */
+  private async preloadFileIds(): Promise<void> {
+    const propName = this.plugin.settings.idPropertyName;
+    await Promise.all(
+      this.files.map(async (f) => {
+        const id = await getNoteId(this.app, f, propName);
+        if (id) this.idByPath.set(f.path, id);
+      }),
+    );
   }
 
   async end(opts?: { forUnload?: boolean }) {
