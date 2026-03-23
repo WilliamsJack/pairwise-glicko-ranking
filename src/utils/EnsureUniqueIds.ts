@@ -1,8 +1,8 @@
 import type { App, TFile } from 'obsidian';
-import { Notice } from 'obsidian';
 
 import { ResolveDuplicateIdsModal } from '../ui/ResolveDuplicateIdsModal';
 import { getNoteId } from './NoteIds';
+import { withNotice } from './safe';
 
 const DEFAULT_POOL = 8;
 
@@ -56,14 +56,9 @@ export async function ensureUniqueIds(
   if (files.length < 2) return true;
 
   while (true) {
-    const scanning = new Notice('Scanning notes for duplicate IDs...', 0);
-
-    let dupes: Map<string, TFile[]>;
-    try {
-      dupes = await findDuplicateIds(app, files, propertyName);
-    } finally {
-      scanning.hide();
-    }
+    const dupes = await withNotice('Scanning notes for duplicate IDs...', () =>
+      findDuplicateIds(app, files, propertyName),
+    );
 
     if (dupes.size === 0) return true;
 

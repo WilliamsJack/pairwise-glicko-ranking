@@ -14,6 +14,7 @@ import {
   updateCohortFrontmatter,
 } from '../utils/FrontmatterStats';
 import { applyIdTransferPlan, planIdTransfer } from '../utils/IdTransfer';
+import { withNotice } from '../utils/safe';
 import type { IdLocation } from './settings';
 import type { FrontmatterPropertiesSettings, SessionLayoutMode } from './settings';
 import { DEFAULT_SETTINGS, effectiveFrontmatterProperties } from './settings';
@@ -95,21 +96,20 @@ export default class GlickoSettingsTab extends PluginSettingTab {
             if (files.length === 0) return;
 
             const propName = this.plugin.settings.idPropertyName;
-            const scanning = new Notice('Scanning notes for note IDs...', 0);
             let plan;
             try {
-              plan = await planIdTransfer(
-                this.app,
-                files,
-                { propertyName: propName, location: oldLoc },
-                { propertyName: propName, location: newLoc },
+              plan = await withNotice('Scanning notes for note IDs...', () =>
+                planIdTransfer(
+                  this.app,
+                  files,
+                  { propertyName: propName, location: oldLoc },
+                  { propertyName: propName, location: newLoc },
+                ),
               );
             } catch (e) {
               console.error('[Glicko] Failed to plan note ID transfer', e);
               new Notice('Failed to scan notes for note IDs.');
               return;
-            } finally {
-              scanning.hide();
             }
 
             if (plan.wouldUpdate === 0) return;

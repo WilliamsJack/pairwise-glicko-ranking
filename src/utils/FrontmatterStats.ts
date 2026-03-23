@@ -1,9 +1,9 @@
 import type { App, TFile } from 'obsidian';
-import { Notice } from 'obsidian';
 
 import type { FrontmatterPropertiesSettings } from '../settings';
 import type { CohortData } from '../types';
 import { getNoteId } from './NoteIds';
+import { withNotice } from './safe';
 
 type PlayerStats = {
   rating: number;
@@ -279,19 +279,16 @@ export async function updateCohortFrontmatter(
   noticeMessage?: string,
   idPropertyName?: string,
 ): Promise<{ updated: number }> {
-  const working = new Notice(noticeMessage ?? 'Updating frontmatter...', 0);
-  try {
-    return await updateCohortFrontmatterProperties(
+  return withNotice(noticeMessage ?? 'Updating frontmatter...', () =>
+    updateCohortFrontmatterProperties(
       app,
       files,
       valuesById,
       newPropName,
       oldPropName,
       idPropertyName,
-    );
-  } finally {
-    working.hide();
-  }
+    ),
+  );
 }
 
 export async function updateCohortRanksInFrontmatter(

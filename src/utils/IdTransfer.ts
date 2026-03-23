@@ -1,5 +1,4 @@
 import type { App, TFile } from 'obsidian';
-import { Notice } from 'obsidian';
 
 import type { IdLocation } from '../settings';
 import { debugWarn } from './logger';
@@ -11,6 +10,7 @@ import {
   removeNoteIdHtmlComments,
   setNoteIdInFrontmatter,
 } from './NoteIds';
+import { withNotice } from './safe';
 
 const DEFAULT_POOL = 8;
 
@@ -164,12 +164,10 @@ export async function applyIdTransferPlan(
   plan: IdTransferPlanResult,
   opts?: { noticeMessage?: string },
 ): Promise<{ updated: number; mismatches: number }> {
-  const working = new Notice(opts?.noticeMessage ?? 'Transferring note IDs...', 0);
+  return withNotice(opts?.noticeMessage ?? 'Transferring note IDs...', async () => {
+    let updated = 0;
+    let mismatches = 0;
 
-  let updated = 0;
-  let mismatches = 0;
-
-  try {
     for (const p of plan.plans) {
       if (p.mismatch) mismatches += 1;
 
@@ -193,9 +191,7 @@ export async function applyIdTransferPlan(
 
       updated += 1;
     }
-  } finally {
-    working.hide();
-  }
 
-  return { updated, mismatches };
+    return { updated, mismatches };
+  });
 }

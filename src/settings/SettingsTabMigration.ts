@@ -4,6 +4,7 @@ import { Notice } from 'obsidian';
 import type GlickoPlugin from '../main';
 import { ConfirmModal } from '../ui/ConfirmModal';
 import { applyIdTransferPlan, planIdTransfer } from '../utils/IdTransfer';
+import { withNotice } from '../utils/safe';
 
 export async function migrateIdPropertyName(
   app: App,
@@ -20,19 +21,10 @@ export async function migrateIdPropertyName(
     return;
   }
 
-  const scanning = new Notice('Scanning notes for existing IDs...', 0);
-  let plan;
-  try {
-    // Auto-detect location per file: a rename writes to whichever location the ID was found in
-    plan = await planIdTransfer(
-      app,
-      files,
-      { propertyName: oldPropName },
-      { propertyName: newPropName },
-    );
-  } finally {
-    scanning.hide();
-  }
+  // Auto-detect location per file: a rename writes to whichever location the ID was found in
+  const plan = await withNotice('Scanning notes for existing IDs...', () =>
+    planIdTransfer(app, files, { propertyName: oldPropName }, { propertyName: newPropName }),
+  );
 
   if (plan.wouldUpdate === 0) {
     plugin.settings.idPropertyName = newPropName;

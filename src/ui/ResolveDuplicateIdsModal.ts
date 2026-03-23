@@ -3,6 +3,7 @@ import { Notice, Setting } from 'obsidian';
 
 import { debugWarn } from '../utils/logger';
 import { removeNoteIdEverywhere } from '../utils/NoteIds';
+import { withNotice } from '../utils/safe';
 import { BasePromiseModal } from './PromiseModal';
 
 function formatCreatedTime(file: TFile): string {
@@ -59,17 +60,14 @@ export class ResolveDuplicateIdsModal extends BasePromiseModal<boolean> {
   private async keepIdOnFile(keep: TFile): Promise<void> {
     const others = this.files.filter((f) => f.path !== keep.path);
 
-    const workingNotice = new Notice('Fixing duplicate note IDs...', 0);
-    let removed = 0;
-
-    try {
+    const removed = await withNotice('Fixing duplicate note IDs...', async () => {
+      let count = 0;
       for (const f of others) {
         const changed = await removeNoteIdEverywhere(this.app, f, this.propertyName);
-        if (changed) removed += 1;
+        if (changed) count += 1;
       }
-    } finally {
-      workingNotice.hide();
-    }
+      return count;
+    });
 
     new Notice(
       `Kept note ID on "${keep.basename}". Removed note ID from ${removed} other note${
