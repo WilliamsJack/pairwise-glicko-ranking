@@ -335,16 +335,17 @@ export default class ArenaSession {
     const cohort = this.plugin.dataStore.store.cohorts[this.cohortKey];
     const players = cohort ? Object.values(cohort.players) : [];
 
+    const stableSigma = this.plugin.settings.stabilityThreshold ?? 150;
+
+    // Clamp at the threshold so over-stable notes don't mask new ones
     let playedSum = 0;
     for (const p of players) {
-      playedSum += p.sigma;
+      playedSum += Math.max(p.sigma, stableSigma);
     }
 
     // Files not yet in the player table carry full uncertainty
     const unmatched = Math.max(0, n - players.length);
     const avgSigma = (playedSum + unmatched * DEFAULT_SIGMA) / n;
-
-    const stableSigma = this.plugin.settings.stabilityThreshold ?? 150;
     const range = DEFAULT_SIGMA - stableSigma;
     return Math.max(0, Math.min(100, ((DEFAULT_SIGMA - avgSigma) / range) * 100));
   }
