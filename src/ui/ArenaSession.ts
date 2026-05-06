@@ -87,13 +87,8 @@ export default class ArenaSession {
     this.leftLeaf = this.layoutHandle.leftLeaf;
     this.rightLeaf = this.layoutHandle.rightLeaf;
 
-    // Resolve the correct document/window for UI and keyboard capture.
-    const doc =
-      this.leftLeaf.view.containerEl.ownerDocument ??
-      this.rightLeaf.view.containerEl.ownerDocument ??
-      this.layoutHandle.doc ??
-      document;
-    const win = doc.defaultView ?? this.layoutHandle.win ?? window;
+    const doc = this.layoutHandle.doc;
+    const win = this.layoutHandle.win;
 
     this.overlayWin = win;
 
@@ -468,7 +463,7 @@ export default class ArenaSession {
     void this.choose(side === 'left' ? 'A' : 'B');
   }
 
-  private mountOverlay(doc: Document = document) {
+  private mountOverlay(doc: Document) {
     const el = doc.body.createDiv({ cls: 'glicko-session-bar' });
     if (Platform.isPhone) el.classList.add('is-mobile');
 
@@ -581,7 +576,7 @@ export default class ArenaSession {
   private onKeydown(ev: KeyboardEvent) {
     // Ignore when typing in inputs/editors
     const target = ev.target as HTMLElement | null;
-    const doc = target?.ownerDocument ?? this.overlayEl?.ownerDocument ?? document;
+    const doc = target?.ownerDocument ?? this.overlayEl?.ownerDocument ?? activeDocument;
 
     const activeEl = doc.activeElement as HTMLElement | null;
 
