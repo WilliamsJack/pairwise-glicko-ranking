@@ -4,7 +4,6 @@ import { DEFAULT_SIGMA, glickoUpdate, inflateSigma } from '../domain/rating/Glic
 import type { GlickoSettings, SessionLayoutMode } from '../settings';
 import { DEFAULT_SETTINGS } from '../settings';
 import type {
-  CohortData,
   CohortDefinition,
   GlickoStore,
   MatchResult,
@@ -194,7 +193,7 @@ export class PluginDataStore {
   }
 
   ensurePlayer(cohortKey: string, id: string) {
-    const cohort = (this.store.cohorts[cohortKey] ??= { players: {} } as CohortData);
+    const cohort = (this.store.cohorts[cohortKey] ??= { players: {} });
     const player = (cohort.players[id] ??= {
       rating: 1500,
       matches: 0,

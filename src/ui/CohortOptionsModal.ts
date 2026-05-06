@@ -169,7 +169,7 @@ export class CohortOptionsModal extends BasePromiseModal<CohortOptionsResult | u
       .setName('Initial scroll position')
       .setDesc('Auto-scroll notes to this position for quicker comparisons.')
       .addDropdown((dd) => {
-        dd.addOptions(scrollLabels as Record<string, string>)
+        dd.addOptions(scrollLabels)
           .setValue(this.scrollWorking)
           .onChange((v) => {
             if (

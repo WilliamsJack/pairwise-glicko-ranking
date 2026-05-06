@@ -20,7 +20,7 @@ function getRenderedRoot(preview: HTMLElement): HTMLElement {
 }
 
 function findFirstContentImage(root: HTMLElement): HTMLElement | null {
-  return root.querySelector('img') as HTMLElement | null;
+  return root.querySelector('img');
 }
 
 function sleep(ms: number): Promise<void> {
@@ -148,7 +148,7 @@ async function scrollAfterFrontmatter(view: MarkdownView): Promise<void> {
       );
 
       while (next && next.scrollHeight <= 0) {
-        next = next.nextElementSibling as HTMLElement | null;
+        next = next.nextElementSibling;
       }
 
       if (next) {

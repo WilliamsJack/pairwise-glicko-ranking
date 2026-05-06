@@ -307,7 +307,7 @@ export default class GlickoSettingsTab extends PluginSettingTab {
     const fmAcc = containerEl.createEl('details', { cls: 'glicko-settings-accordion' });
     fmAcc.open = false;
     fmAcc.createEl('summary', { text: 'Default frontmatter properties' });
-    const fmBody = fmAcc.createEl('div', { cls: 'glicko-settings-body' });
+    const fmBody = fmAcc.createDiv({ cls: 'glicko-settings-body' });
 
     const fm = this.plugin.settings.frontmatterProperties;
 
@@ -347,7 +347,7 @@ export default class GlickoSettingsTab extends PluginSettingTab {
     const reportAcc = containerEl.createEl('details', { cls: 'glicko-settings-accordion' });
     reportAcc.open = false;
     reportAcc.createEl('summary', { text: 'Default post-session report settings' });
-    const reportBody = reportAcc.createEl('div', { cls: 'glicko-settings-body' });
+    const reportBody = reportAcc.createDiv({ cls: 'glicko-settings-body' });
 
     reportBody.createEl('p', {
       text: 'These settings are used as defaults when configuring reports on a new cohort.',
