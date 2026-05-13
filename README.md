@@ -20,10 +20,9 @@ _Other comparison arena UI options are available in Settings - shown here is **r
 
 ## How it works: Try it in two minutes
 
-1. Install: Not yet in the Community Plugins list, so first install [BRAT](https://obsidian.md/plugins?id=obsidian42-brat)
-2. Add the Pairwise Glicko Ranking repo - `https://github.com/WilliamsJack/pairwise-glicko-ranking` and enable the plugin
-3. Run the **Pairwise Glicko Ranking: Start rating session** command (or click the trophy icon)
-    - Pick a **cohort** of notes to rank (vault, folder, tags, or (my favourite way) - Bases).
+1. Install from [Pairwise Glicko Ranking - Obsidian Community Plugins](https://community.obsidian.md/plugins/pairwise-glicko-ranking).
+2. Run the **Pairwise Glicko Ranking: Start rating session** command (or click the trophy icon)
+3. Pick a **cohort** of notes to rank (vault, folder, tags, or Bases).
     - The plugin opens **two notes side-by-side** and you choose a winner.
     - The plugin (optionally) writes stats like **Rank** (1 = best in cohort), **Rating** , or **Wins** to frontmatter (property names are configurable).
     - Your Bases can then sort or filter by those properties, so you can rank notes by subjective criteria without having to decide what star rating a note "deserves".
