@@ -159,12 +159,14 @@ export default class GlickoSettingsTab extends PluginSettingTab {
         );
 
         // Trigger migration on blur (not on every keystroke)
-        t.inputEl.addEventListener('blur', async () => {
+        t.inputEl.addEventListener('blur', () => {
           const trimmed = (t.getValue() ?? '').trim();
           if (!trimmed || trimmed === this.plugin.settings.idPropertyName) return;
 
-          await migrateIdPropertyName(this.app, this.plugin, trimmed);
-          this.display();
+          void (async () => {
+            await migrateIdPropertyName(this.app, this.plugin, trimmed);
+            this.display();
+          })();
         });
       });
 

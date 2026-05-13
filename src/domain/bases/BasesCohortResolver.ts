@@ -12,7 +12,7 @@ type ResolveOpts = {
 };
 
 const nextFrame = (): Promise<void> =>
-  new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+  new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()));
 
 const sleep = (ms: number): Promise<void> =>
   new Promise<void>((resolve) => window.setTimeout(resolve, ms));
